@@ -1,41 +1,78 @@
-import React from 'react'
-import { useState } from 'react'
-import './App.css'
+import React from "react";
+import { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [firstname, setfirstname] = useState("");
+  const [lastname, setlastname] = useState("");
+  const [value, setvalue] = useState([]);
+  const [isError, setIsError] = useState(false);
 
-  const [firstname, setfirstname] = useState("")
-  const [lastname, setlastname] = useState("")
-  const [value, setvalue] = useState([])
-   
-  const submit =()=> {
-    if (firstname == "" || lastname == ""){
-      alert("text field should be field");
-    }else{
+  const submit = () => {
+    if (firstname == "" || lastname == "") {
+      setIsError(true);
+    } else {
       setvalue((olditems) => {
-        return [...olditems, firstname + " " + lastname]
-      })
+        return [...olditems, { firstname, lastname }];
+      });
     }
-    
-  }
+  };
 
- return (
-    <div className='card'>
-     <h1>Enter First & last name </h1>
-      <input type="text"  onChange={(e)=>setfirstname(e.target.value)} placeholder='FirstName'/>
-      <input type="text" onChange={(e) => setlastname(e.target.value)} placeholder='Lastname' /> <br />
-
-
-      
-      <button onClick={submit}>Submit</button>
+  return (
+    <div className="card">
+      <div className="form">
    
-     
-  {
-    value.map((val)=>
-    {return <h1>  {val}</h1>} )
-  }
-    </div>
-  )
- }
+        <div className="flex">
+          <label>
+            Enter firstname
+            <br />
+            <input
+              type="text"
+              onChange={(e) => setfirstname(e.target.value)}
+              onBlur={(e) => setIsError(false)}
+              placeholder="FirstName"
+            />
+            <br></br>
+          </label>
+          <br></br>
+          <label>
+            Enter lastname
+            <br />
+            <input
+              type="text"
+              onChange={(e) => setlastname(e.target.value)}
+              onBlur={(e) => setIsError(false)}
+              placeholder="Lastname"
+            />
+            <br></br>
+          </label>
+          <button onClick={submit}>Submit</button>
+        </div>
+        {isError ? (
+          <span className="error">Fields Should not be empty</span>
+        ) : null}
+      </div>
 
-export default App
+      <table id="names">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {value.map((val) => {
+            return (
+              <tr>
+                <td>{val.firstname}</td>
+                <td>{val.lastname}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default App;
